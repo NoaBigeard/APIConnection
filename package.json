@@ -1,0 +1,27 @@
+{
+  "name": "apiconnection",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon Backend/Server.js",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "pg": "^8.20.0",
+    "prettier": "^3.8.3",
+    "random": "^5.4.1",
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid": "^13.0.0",
+    "vue": "^3.5.32"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "nodemon": "^3.1.14",
+    "vite": "^8.0.4"
+  }
+}

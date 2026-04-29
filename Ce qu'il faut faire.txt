@@ -1,0 +1,343 @@
+Tous ce qu'il faut faire : 
+
+Connection : 
+ 	- Pseudo
+	- Mot de passe 
+	- Si échoué 3x -> bloquer le compte 
+	- Pouvoir réinitialiser le mot de passe ( envoie de mail ) 
+	- CoudFlare pour évite les bots 
+
+
+Inscription : 
+	- Nom // pas mettre a l'Inscription mais lors de la commande 
+	- Prénom // pas mettre a l'Inscription mais lors de la commande 
+	- Mot de passe 
+	- Téléphone // pas mettre a l'Inscription mais lors de la commande 
+	- Mail
+	- Envoie de mail de bienvenue 
+	- CoudFlare pour évite les bots 
+
+
+Coté administrateur : 
+	- Ajouter / modifier des articles 
+		- Nom 
+		- Prix
+		- Quantité
+		- Toutes les tailles 
+		- Photos 
+	- Gérer les utilisateurs 
+		- Modifier informations
+		- Supprimer 
+	- Voir les statistiques ( produit le plus consulté, la somme total … )
+	- Ajouter un code promo disponible une certain durée 
+		- Faire un champ avec le code que l'on souhaite mettre 
+		- La sélection de la date de fin du code 
+		- Un pourcentage de réduction que le souhaite
+	- Voir les commentaires 
+		- Supprimer 
+		- Répondre
+	
+Coté utilisateur : 
+	- Acheter un / des article(s)
+		- Nom
+		- Prénom 
+		- Téléphone
+		- Saisir son adresse ( API de Google map ) 
+		- Code de carte ( Stripe ) 
+		
+	- Saisir un code promo ( vérifier s'il est encore disponible )
+	- Voir son panier
+		- Tous les articles dedans
+		- Le prix total 
+	- Personnaliser son nom / numéro de maillot ( refaire une image avec les bonnes infos )
+	- Filtrer les produits 
+	- Ajouter au favoris 
+	- Accéder à ses favoris 
+	- Faire le suivi de son colis
+	- Pouvoir écrire / consulter les commentaires 
+	
+
+
+Les tables que j'ai besoin : 
+User : 
+	Id
+	Nom
+	Prénom
+	Mot de passe 
+	Pseudo
+	Sexe
+	s'il est admin 
+	
+
+Articles :
+	Id
+	Nom 
+	Prix
+	Stock 
+	Taille dispo ( tableau ) 
+	Description       
+	Catégorie_id (FK) 
+	Photos 
+
+
+Catégorie : 	
+	Id
+	Nom 
+
+PanierArticle :
+  	Id
+   	Quantité
+   	Taille_choisie     
+   	Personnalisation  
+	FK id_panier
+  	FK id_article 
+
+
+Commande : 
+	Id
+	Statut 
+	Adresse 
+	Nombre d'article 
+	Prix 
+	Foreign key (id (user))
+
+
+Commentaire : 
+	Id
+	// Nom_user
+	// Prenom_user
+	Pseudo_user
+	Texte
+	Titre
+	date
+	Note 
+	Reponse_admin	
+	Foreign key (id (user))
+
+Favoris :	
+	Id
+	FK id_user
+	FK id_article
+
+CodePromo : 
+	Id
+	Code           
+	Pourcentage
+	Date_fin
+	est_actif
+
+
+Configuration (sorte de .env mais dans la bdd) : 
+	nom d usite 
+	mail d'aide
+	longueur du double auth
+	oui ou non double auth 
+	
+	
+
+############################ Ce qu'il faut changer ############################ 
+pas de pseudo 
+AccessLevel plutot que isAdmin( 0 à 100 )
+
+Mettre les date des creation 
+changeDate ( du profil )
+
+User UUID en plus de l'id et use dans les URL 
+EmailVerified boolean 
+//Phone VARCHAR 255
+ENUM pour sex 
+
+TOUJOURS METTRE QUE ID ET PAS id_user sauf dans les FK
+
+Dans login :
+	user_agent
+	success Boolean
+	Date toujours 
+
+Dans login_logs 
+	Mettre le max d'info ( pays, ip ... )
+
+TAble mot de passe 
+	id 
+	email
+	Type ( recoverPassword, login ...) 	
+
+
+
+code postal -> zip code
+ 
+FAire du soft delete -> champ deleted 0 ou 1 POUR NE PAS DE FAIRE UNE VRAI SUPPRESSION DIRECT EN BDD 
+
+pour toute les les tables : 
+	creationdate, changeDt, deleted 
+	
+Ne jamais mettre decimal mais faire *100 avant la bdd et faire /100 pour le front -> evite les pb d'arrondi
+
+la commande commence quand le client est co 
+
+
+dans order ( il faut queje chane le nom )
+prix ttc, ht, tva 
+	
+	
+
+pour mettre plusieurs données sur une seule ligne : id1, id2, id3  
+
+modifier pour le ON CURRENT_TIMESTAMP
+Panier = commande en attente 
+
+
+
+
+
+
+
+
+
+
+Changer le nom des tables ok
+
+
+
+dans les table juste name pas user_name ok
+metter toutes les table au pluriels ok
+Mettre tous en anglais 
+
+juste comment âs commentary ok
+
+pour couleur et taille, faire un listing ( id1, id2... )pas une jointure avec une table 
+Ht -> tva -> prix 
+
+Creation_date CURRENT_TIMESTAMP
+
+adresse
+manque rue avec comlément 
+
+deleted default 0 pas false 
+
+faire enum 
+
+Model = SQL
+
+
+contenu du mail 
+Afin de finaliser merci de valider le code suivant + code 
+Faire nouveau end point validateEmail 
+le code de 4/6 chiffre et verifier quel user a ce code 
+quand il s'inscrit mettre en bdd : mail, unique ID, code envoyé verif, mdp, address ip, email verify BOOLEAN
+
+
+faire get user
+
+nettoyage de password et authenticate_code
+
+Recup ip et useragent
+
+
+
+POur continuer 
+verif si il a verif sont mail, si mail Supprimer
+
+mJ99 :code de la borne 
+
+
+créer 3 catégories (avec postman / en bdd direct)
+pour chaque catégories 2/3 produits 
+pour chaque prod upload de photo avec AWS
+
+-> puis les filtres
+
+Faire des requetes générique 
+async function create(table (user par ex), champ (id, ))
+
+faire plus de vérification  et basic auth
+ j
+Pour la borne : 
+Mettre chrome 
+modifier le lien avec un script 
+
+enlever le alt tab windows ....
+pouvoir modifier le lien du site depuis /appup/kioskLink
+si pas de lien mette apppu.fr
+
+
+
+
+
+# <u>Créer une classe qui va être appelée à chaque post</u>
+
+
+## Récupérer les noms des tables depuis l'url (faire /:table_name)
+
+<u>Exemple :</u> https://localhost:3000/.../user (nom de la table)
+
+
+## Récupérer les fields depuis le query (?fields=id,name,...)
+https://localhost:3000/.../user?fields=id,name,email
+
+
+## Faire pareil pour Filters
+https://localhost:3000/.../user?fields=id,name,email&filters=age,gt,10
+
+
+## Créer une seule fonction où tous les posts passent 
+
+Date pour le rdv Millet: 
+lundi 11 mai / 26-29 mai / 15 mai  	
+
+
+chaque requete doit avoir un header req.header 
+faire fonction qui effectue plein de teste et l'appeler partout 
+pour la requete de connectino laisser celle de base ne peux pas etre générique
+faire en sorte que si je change le nombre de config ca change le nombre de chiffre envoyé
+Il faut un mot de passe robuste check ca aussi
+ 
+
+faire un route pour insert ( insertTable)
+
+
+Ce qu'il faut faire / améliorer:
+- Il faut bien check le header pour chaque route privé pas les publics ( mpd oublié par ex)
+Pour le frontend, si il y a la auth basic et qu'il a le access level necessaire, if faut faire une session ( cookie, localhost) 
+- Bien faire l'auth basic que le bearer token car et du coup il faut le balader partout le basic (= mail + mot de passe encodé en base 64 = valeur basique)
+(Si tu te fait péta ton PC et l'autre récup tes cookies, il a juste a décoder et il a toute tes infos, mais c'est mieux)
+quand je vais a la racine de l'API il y a un fichier qui regarde s'il y a de nouvelle table si oui on créer un fichier avec toute les infos des champs
+
+Ce que je doit faire vendredi 24 avril 2026 :
+- Faire rapport semaine 3 moitié OK
+- Enlever le bearer token pour juste le basic auth  (= mail + mot de passe encodé en base 64 = valeur basique) OK 
+- Mettre au propre mes table et mes dossiers
+- Faire une fonction de vérification ( déja faites normalement ) que j'appelle tous le temps au debut plutot que de le mettre en middleware
+- Faire une route pour add quelque chose dedans, (soft)delete OK
+
+
+
+Ce que je doit faire vendredi 27 avril 2026 :
+- avoir un fichier par table ( service ) automatiquement 
+user.service 
+catégories.service
+dans lequel il y a TOUS LE CRUD 
+CREER LE NOMBRE DE FICHIER A PARTIR de la bdd ( nombre de table 
+
+lister, modif, creer, delete 
+possible de rajouter des fonction spé a chaque service )+
+
+
+
+prendre toute les table et check si les fichier qui existe ( avec le meme nom ) OK 
+console.log (fichier manquant || tous existe ) OK 
+function generate service ( prendre le template -> créer le fichier )OK 
+faire des tests 
+
+
+Mettre le token dans l'URL ( resetpassword ) et dans le bdd de users et donc ne pas le vérifier dans postMan avec la key 
+Pour le middleware recup le basic auth et verif si le gars existe ( deja fait ) et récup en parametre de la fonction l'access level nécéssaire pour y accéder 
+
+mofidier le if() filter() dans tous les services avec une fonction  
+Faire une route edit pour pouvoir creer un super admin  (100 d'accesselevel)
+
+
+Il faut que j'enleve le switch case par default pour mettre un cas select OK
+faire un update 
+
+Faire le github
