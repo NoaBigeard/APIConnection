@@ -17,7 +17,10 @@ router.post(
 router.post("/connection", utilisateurController.connectionController);
 
 router.post("/resetPassword", utilisateurController.resetPasswordController);
-router.patch("/updatePassword/:token", utilisateurController.updatePasswordController);
+router.patch(
+  "/updatePassword/:token",
+  utilisateurController.updatePasswordController,
+);
 
 router.post(
   "/:table/insert",
@@ -41,8 +44,6 @@ router.patch(
   authMiddleware(50),
   utilisateurController.softDeleteController,
 );
-
-
 
 //Les dernières
 router.get("/getMe", authMiddleware(10), utilisateurController.getMeController);

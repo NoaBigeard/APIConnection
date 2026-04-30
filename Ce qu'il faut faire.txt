@@ -338,6 +338,12 @@ Faire une route edit pour pouvoir creer un super admin  (100 d'accesselevel)
 
 
 Il faut que j'enleve le switch case par default pour mettre un cas select OK
-faire un update 
+faire un update OK
 
-Faire le github
+Faire le github OK
+régler le probleme de allowedTable OK
+Faire le header ( il faut avoir la clé pour pouvoir rentrer dans l'API NoaPloufPlouf )
+faire table mail (subject content ) OK 
+
+écrire dasn un fichier log ( tous les appels des endpoints, qui l'a fait ... en commencant par la date )access log 
+faire un deuxieme fichier errorLog avec toutes les erreurs (tel champs doit etre rempli, ca ne marche pas ...)

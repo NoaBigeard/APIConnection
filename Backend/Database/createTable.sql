@@ -1,4 +1,4 @@
--- psql -U postgres -d DBStage
+-- chcp 65001; psql -U admin -d DBStage
 
 
 -- DROP SCHEMA public CASCADE;
@@ -8,6 +8,8 @@
 -- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
 -- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO admin;
 -- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO admin;
+
+DROP TABLE IF EXISTS mail CASCADE;
 DROP TABLE IF EXISTS sizes CASCADE;
 DROP TABLE IF EXISTS colors CASCADE;
 DROP TABLE IF EXISTS favorites CASCADE;
@@ -20,8 +22,6 @@ DROP TABLE IF EXISTS photos CASCADE;
 DROP TABLE IF EXISTS addresses CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS configurations CASCADE;
-
---Faire la table login_log pour mettre user_agent, success ip_address et token
 
 CREATE TABLE IF NOT EXISTS configurations (
     id SERIAL PRIMARY KEY,
@@ -59,7 +59,29 @@ CREATE TABLE IF NOT EXISTS users (
     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE
 );
-
+INSERT INTO users (
+    uuid, first_name, name, password, mail, phone, sex,
+    access_level, user_agent, ip_address, token, token_expiry,
+    mail_verified, last_login, creation_date, change_date, deleted
+) VALUES (
+    '5b5a4a09-65cd-45c4-9123-a05d300cd316',
+    'Noa',
+    'Bigeard',
+    '$2b$10$JIcJJCM9JsoAVIU40bZqBeBwVf0HQRnMUQ6nS8iN0104lvAivwr/O',
+    'nooabigeard@mail.com',
+    '0768604019',
+    'Male',
+    100,
+    'PostmanRuntime/7.53.0',
+    '::1',
+    NULL,
+    NULL,
+    TRUE,
+    NULL,
+    '2026-04-29T09:03:17.157Z',
+    '2026-04-29T09:03:17.157Z',
+    FALSE
+);
 CREATE TABLE IF NOT EXISTS addresses (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
@@ -186,5 +208,31 @@ CREATE TABLE IF NOT EXISTS sizes (
     deleted BOOLEAN DEFAULT FALSE
 );
 
-DROP TABLE IF EXISTS test CASCADE;
+CREATE TABLE IF NOT EXISTS mail(
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT FALSE
+);
 
+INSERT INTO mail (type, subject, content) VALUES 
+('inscription', 'Valide ton compte', '<p>Afin de finaliser votre compte, merci d''effectuer la validation avec le code suivant : </p><h2>{{code}}</h2>'),
+('reset_password', 'Réinitialiser votre mot de passe', '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a href="{{link}}">Réinitialiser mon mot de passe</a>');
+SET client_encoding = 'UTF8';
+
+UPDATE mail SET 
+  subject = 'Réinitialiser votre mot de passe',
+  content = '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a href="{{link}}">Réinitialiser mon mot de passe</a>'
+WHERE type = 'reset_password';
+-- DROP TABLE IF EXISTS test CASCADE;
+-- CREATE TABLE IF NOT EXISTS test (
+--     id SERIAL PRIMARY KEY,
+--     name VARCHAR(50) NOT NULL,
+--     description VARCHAR(255),
+--     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     deleted BOOLEAN DEFAULT FALSE
+-- );

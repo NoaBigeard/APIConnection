@@ -1,30 +1,48 @@
 //Brevo
 const SibApiV3Sdk = require("sib-api-v3-sdk");
+const { TableBuilder } = require("../Model/generic.model");
+const pool = require("../database/db");
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
 
 const api = new SibApiV3Sdk.TransactionalEmailsApi();
 
-async function sendMailInscription({ mail, code }) {
+async function getMailTemplate(type, variables = {}) {
+  const query = new TableBuilder("mail")
+    .where("type", "=", type)
+    .where("deleted", "=", false)
+    .limit(1)
+    .build();
+
+  const {
+    rows: [template],
+  } = await pool.query(query.query, query.parameters);
+
+  if (!template)
+    throw { status: 404, message: `Template mail "${type}" introuvable` };
+
+  let { subject, content } = template;
+
+  Object.entries(variables).forEach(([key, value]) => {
+    subject = subject.replaceAll(`{{${key}}}`, value);
+    content = content.replaceAll(`{{${key}}}`, value);
+  });
+
+  return { subject, content };
+}
+async function sendMail({ mail, type, variables = {} }) {
+  const { subject, content } = await getMailTemplate(type, variables);
+
   await api.sendTransacEmail({
-    sender: { email: "nooabigeard@gmail.com", name: "Ton Site" },
+    sender: {
+      email: process.env.MAIL,
+      name: process.env.WEBSITE_NAME || "Mon Site",
+    },
     to: [{ email: mail }],
-    subject: "Valide ton compte",
-    htmlContent:
-      "<p>Afin de finaliser votre compte, merci d'effectuer la validation avec le code suivant : </p>" +
-      `<h2>${code}</h2>`,
+    subject,
+    htmlContent: content,
   });
 }
-async function sendMailResetPassword({ mail, token }) {
-  await api.sendTransacEmail({
-    sender: { email: "nooabigeard@gmail.com", name: "Ton Site" },
-    to: [{ email: mail }],
-    subject: "Réinitialiser votre mot de passe",
-    htmlContent: `<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p>
-   <a href="${process.env.LINK_FRONT}/reset?token=${token}">
-     Réinitialiser mon mot de passe
-   </a>`,
-  });
-}
-module.exports = { sendMailInscription, sendMailResetPassword };
+
+module.exports = { sendMail };

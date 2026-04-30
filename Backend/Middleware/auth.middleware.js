@@ -35,9 +35,16 @@ async function check(authHeader) {
   if (user.deleted) {
     throw { status: 403, message: "utilisateur supprimé" };
   }
+
   return user;
 }
 
+/* requiredLevel
+    0: non inscrit (s'inscrire, se connecter, vérifier son mail, reset son mot de passe)
+   10: mail vérifié (peut voir les infos d'une table) ( peut-être au niveau 0 ca enfait)
+   50: client (supprimer des infos, en ajouter, le modifier ( sauf user ))
+  100: super admin ( Peut tout faire )
+*/
 function authMiddleware(requiredLevel = 0) {
   return async (req, res, next) => {
     try {
@@ -51,10 +58,26 @@ function authMiddleware(requiredLevel = 0) {
       }
 
       req.user = user;
+
       next();
     } catch (err) {
       return res.status(err.status || 401).json({ message: err.message });
     }
   };
 }
-module.exports = { authMiddleware, check };
+
+function apiKeyMiddleware(req, res, next) {
+  const apiKey = req.headers["x-api-key"];
+
+  if (!apiKey) {
+    return res.status(401).json({ message: "Clé API manquante" });
+  }
+
+  if (apiKey !== process.env.API_KEY) {
+    return res.status(403).json({ message: "Clé API invalide" });
+  }
+
+  next();
+}
+
+module.exports = { authMiddleware, check, apiKeyMiddleware };

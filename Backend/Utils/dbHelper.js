@@ -1,6 +1,7 @@
 const pool = require("../database/db");
 const { v4: uuidv4 } = require("uuid");
 
+// ################################################## pour aller chercher le query ##################################################
 function parseQuery(req) {
   const fields = req.query.fields
     ? req.query.fields.split(",").map((fields) => fields.trim())
@@ -17,6 +18,7 @@ function parseQuery(req) {
 
   return { fields, filter, limit, offset, orderBy, orderAttr };
 }
+// ################################################## pour get les columns ##################################################
 
 async function getTableColumns(tableName) {
   const result = await pool.query(
@@ -26,6 +28,7 @@ async function getTableColumns(tableName) {
   );
   return result.rows.map((r) => r.column_name);
 }
+// ################################################## pour ajouter un uuid si besoin ##################################################
 
 async function addUuidIfNeeded(tableName, data) {
   const columns = await getTableColumns(tableName);

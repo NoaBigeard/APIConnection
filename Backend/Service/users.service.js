@@ -5,10 +5,8 @@ const { TableBuilder } = require("../Model/generic.model");
 const { cleanFields } = require("../Utils/template");
 const { check } = require("../Middleware/auth.middleware");
 const utilisateurModel = require("../Model/utilisateur.model");
-const {
-  sendMailInscription,
-  sendMailResetPassword,
-} = require("../Utils/mailer");
+const { sendMail } = require("../Utils/mailer");
+
 //console.log("Dans le fichier users")
 // ######################################################################## INSERT ########################################################################
 async function insertUsersService(data) {
@@ -86,6 +84,25 @@ async function updateUsersService(id, data) {
 
 //######################################################################## SOFT DELETE ########################################################################
 async function deleteUsersService(id) {
+  const queryUser = new TableBuilder("users")
+    .select("access_level")
+    .where("id", "=", id)
+    .limit(1)
+    .build();
+  const {
+    rows: [user],
+  } = await pool.query(queryUser.query, queryUser.parameters);
+
+  if (!user) {
+    throw { status: 404, message: "Utilisateur introuvable" };
+  }
+
+  if (user.access_level >= 100)
+    throw {
+      status: 403,
+      message: "Vous ne pouvez pas supprimer un super administrateur",
+    };
+
   const builder = new TableBuilder("users").update({ deleted: true });
 
   if (id) {
@@ -213,9 +230,10 @@ async function userInscriptionService(user) {
   } = await pool.query(buildResult.query, buildResult.parameters);
 
   if (needCode) {
-    await sendMailInscription({
+    await sendMail({
       mail: createdUser.mail,
-      code: createdUser.authentication_code,
+      type: "inscription",
+      variables: { code: createdUser.authentication_code },
     });
   }
 
@@ -309,17 +327,28 @@ async function resetPasswordService(body) {
 
   await pool.query(saveTokenQuery.query, saveTokenQuery.parameters);
 
-  await sendMailResetPassword({ mail, token });
+  await sendMail({
+    mail,
+    type: "reset_password",
+    variables: { link: `${process.env.LINK_FRONT}/reset?token=${token}` },
+  });
 
   return {
     message: "Vous avez reçu un mail pour réinitialiser votre mot de passe",
-    // token,
+    token,
   };
 }
 
-async function updatePasswordService(token, newPassword, confirmationNewPassword) {
+async function updatePasswordService(
+  token,
+  newPassword,
+  confirmationNewPassword,
+) {
   if (!token || !newPassword || !confirmationNewPassword) {
-    throw { status: 804, message: "Un ou plusieurs champs ne sont pas remplis" };
+    throw {
+      status: 804,
+      message: "Un ou plusieurs champs ne sont pas remplis",
+    };
   }
 
   if (newPassword !== confirmationNewPassword) {
@@ -331,7 +360,9 @@ async function updatePasswordService(token, newPassword, confirmationNewPassword
     .where("token_expiry", ">", new Date())
     .build();
 
-  const { rows: [existingUser] } = await pool.query(checkQuery.query, checkQuery.parameters);
+  const {
+    rows: [existingUser],
+  } = await pool.query(checkQuery.query, checkQuery.parameters);
 
   if (!existingUser) {
     throw { status: 400, message: "Token invalide ou expiré" };

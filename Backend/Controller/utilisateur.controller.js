@@ -1,4 +1,5 @@
 const { sendMailInscription } = require("../Utils/mailer");
+const { errorLog } = require("../utils/logger");
 
 async function userInscriptionController(req, res) {
   try {
@@ -10,6 +11,7 @@ async function userInscriptionController(req, res) {
   } catch (err) {
     const status = err.status || 800;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -20,6 +22,7 @@ async function inscriptionMailController(req, res) {
     return res.status(200).json({ message: "Mail envoyé avec succès !" });
   } catch (err) {
     console.error(err);
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(500).json({ message: "Erreur lors de l'envoi du mail" });
   }
 }
@@ -34,6 +37,7 @@ async function verificationAuthenticateCodeController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -46,6 +50,7 @@ async function connectionController(req, res) {
   } catch (err) {
     const status = err.status || 800;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -58,6 +63,7 @@ async function resetPasswordController(req, res) {
   } catch (err) {
     const status = err.status || 800;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -78,6 +84,7 @@ async function updatePasswordController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -92,6 +99,7 @@ async function getMeController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -117,6 +125,7 @@ async function insertTableController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -136,6 +145,7 @@ async function getTableController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -144,12 +154,21 @@ async function softDeleteController(req, res) {
   try {
     const table = req.params.table.trim();
     const id = req.params.id || null;
+
+    if (table === "users" && (!req.user || req.user.access_level < 100)) {
+      return res.status(403).json({
+        message:
+          "Accès refusé : niveau 100 requis pour supprimer un utilisateur",
+      });
+    }
+
     const service = require(`../Service/${table}.service.js`);
     const result = await service[`delete${capitalize(table)}Service`](id);
     return res.status(200).json(result);
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }
@@ -167,6 +186,7 @@ async function updateTableController(req, res) {
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || "Erreur serveur";
+    errorLog(err, `${req.method} ${req.originalUrl}`);
     return res.status(status).json({ message });
   }
 }

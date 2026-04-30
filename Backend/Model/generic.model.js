@@ -1,21 +1,22 @@
+const pool = require("../database/db");
+
+let allowedTables = null;
+
+async function initAllowedTables() {
+  const result = await pool.query(
+    `SELECT table_name
+     FROM information_schema.tables
+     WHERE table_schema = 'public'
+       AND table_type = 'BASE TABLE'`,
+  );
+
+  allowedTables = new Set(result.rows.map((row) => row.table_name));
+  return allowedTables;
+}
+
 class TableBuilder {
   constructor(table) {
-    const allowedTables = [
-      "users",
-      "articles",
-      "categories",
-      "orders",
-      "comments",
-      "addresses",
-      "configurations",
-      "photos",
-      "discountcode",
-      "favorites",
-      "colors",
-      "sizes",
-      "test",
-    ];
-    if (!allowedTables.includes(table)) {
+    if (!allowedTables || !allowedTables.has(table)) {
       throw { status: 400, message: `Table "${table}" non autorisée` };
     }
 
@@ -163,4 +164,5 @@ class TableBuilder {
 
 module.exports = {
   TableBuilder,
+  initAllowedTables,
 };
