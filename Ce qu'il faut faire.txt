@@ -346,4 +346,8 @@ Faire le header ( il faut avoir la clé pour pouvoir rentrer dans l'API NoaPlouf
 faire table mail (subject content ) OK 
 
 écrire dasn un fichier log ( tous les appels des endpoints, qui l'a fait ... en commencant par la date )access log 
-faire un deuxieme fichier errorLog avec toutes les erreurs (tel champs doit etre rempli, ca ne marche pas ...)
+faire un deuxieme fichier errorLog avec toutes les erreurs (tel champs doit etre rempli, ca ne marche pas ...) OK je pense 
+
+FAIRE Le test : si je suis co sur user 1, essaie de modifier le user 2 pour voir 
+Si le AccessLevel est <= 10 il n'est possible que de modifier son propre compte 
+si = 100 on peux modif tous le monde 

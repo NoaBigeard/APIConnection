@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const utilisateurController = require("../Controller/utilisateur.controller");
 const { authMiddleware } = require("../Middleware/auth.middleware");
+const { upload } = require("../Utils/upload");
 
 router.post("/inscription", utilisateurController.userInscriptionController);
 //Peut-être plus nécessaire maintenant vu que la route /inscription l'utilise
@@ -20,6 +21,14 @@ router.post("/resetPassword", utilisateurController.resetPasswordController);
 router.patch(
   "/updatePassword/:token",
   utilisateurController.updatePasswordController,
+);
+
+// ######################## AWS upload ########################
+router.post(
+  "/upload",
+  authMiddleware(10),
+  upload.single("file"),
+  utilisateurController.uploadAWSController,
 );
 
 router.post(

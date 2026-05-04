@@ -1,4 +1,4 @@
-const { sendMailInscription } = require("../Utils/mailer");
+const { sendMail } = require("../Utils/mailer");
 const { errorLog } = require("../utils/logger");
 
 async function userInscriptionController(req, res) {
@@ -18,7 +18,7 @@ async function userInscriptionController(req, res) {
 
 async function inscriptionMailController(req, res) {
   try {
-    await sendMailInscription({ mail: req.body.mail });
+    await sendMail({ mail: req.body.mail, type: "inscription" });
     return res.status(200).json({ message: "Mail envoyé avec succès !" });
   } catch (err) {
     console.error(err);
@@ -46,6 +46,8 @@ async function connectionController(req, res) {
   try {
     const usersService = require("../Service/users.service");
     const result = await usersService.connectionService(req.body);
+    console.log("body reçu:", req.body);
+    console.log("headers:", req.headers.authorization);
     return res.status(200).json(result);
   } catch (err) {
     const status = err.status || 800;
@@ -190,6 +192,19 @@ async function updateTableController(req, res) {
     return res.status(status).json({ message });
   }
 }
+async function uploadAWSController(req, res) {
+  try {
+    const { uploadAWSService } = require("../Utils/upload");
+    if (!req.file) throw { status: 400, message: "Aucun fichier envoyé" };
+    const result = await uploadAWSService(req.file);
+    return res.status(200).json(result);
+  } catch (err) {
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    return res.status(status).json({ message });
+  }
+}
+
 module.exports = {
   userInscriptionController,
   inscriptionMailController,
@@ -202,4 +217,5 @@ module.exports = {
   insertTableController,
   softDeleteController,
   updateTableController,
+  uploadAWSController,
 };

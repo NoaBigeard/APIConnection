@@ -8,15 +8,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1041.0",
+    "aws-sdk": "^2.1693.0",
     "bcrypt": "^6.0.0",
+    "bucket": "^0.0.1",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
+    "multer": "^2.1.1",
+    "multer-s3": "^3.0.1",
     "pg": "^8.20.0",
     "prettier": "^3.8.3",
     "random": "^5.4.1",
     "sib-api-v3-sdk": "^8.5.0",
-    "uuid": "^13.0.0",
+    "uuid": "^13.0.1",
     "vue": "^3.5.32"
   },
   "devDependencies": {
