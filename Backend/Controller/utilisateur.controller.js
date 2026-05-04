@@ -136,7 +136,7 @@ async function getTableController(req, res) {
   try {
     const table = req.params.table.trim();
     const id = req.params.id || null;
-    const { parseQuery } = require("../Utils/dbHelper");
+    const { parseQuery } = require("../Utils/helper");
     const query = parseQuery(req);
 
     const service = require(`../Service/${table}.service.js`);
@@ -183,6 +183,7 @@ async function updateTableController(req, res) {
     const result = await service[`update${capitalize(table)}Service`](
       id,
       req.body,
+      req.user,
     );
     return res.status(200).json(result);
   } catch (err) {
@@ -192,6 +193,7 @@ async function updateTableController(req, res) {
     return res.status(status).json({ message });
   }
 }
+
 async function uploadAWSController(req, res) {
   try {
     const { uploadAWSService } = require("../Utils/upload");

@@ -37,4 +37,18 @@ async function addUuidIfNeeded(tableName, data) {
   }
   return data;
 }
-module.exports = { parseQuery, getTableColumns, addUuidIfNeeded };
+
+function checkPermission(requestingUser, ownerId) {
+  if (requestingUser.access_level <= 10 && requestingUser.id !== ownerId) {
+    const err = new Error("No permission");
+    err.status = 403;
+    throw err;
+  }
+}
+
+module.exports = {
+  parseQuery,
+  getTableColumns,
+  addUuidIfNeeded,
+  checkPermission,
+};

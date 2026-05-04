@@ -6,6 +6,7 @@ const { cleanFields } = require("../Utils/template");
 const { check } = require("../Middleware/auth.middleware");
 const utilisateurModel = require("../Model/utilisateur.model");
 const { sendMail } = require("../Utils/mailer");
+const { checkPermission } = require("../Utils/helper");
 
 //console.log("Dans le fichier users")
 // ######################################################################## INSERT ########################################################################
@@ -72,7 +73,9 @@ async function getUsersByIdService(id, { fields } = {}) {
 }
 
 //######################################################################## UPDATE ########################################################################
-async function updateUsersService(id, data) {
+async function updateUsersService(id, data, requestingUser) {
+  checkPermission(requestingUser, parseInt(id));
+
   const query = new TableBuilder("users")
     .update(data)
     .where("id", "=", id)

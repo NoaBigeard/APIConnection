@@ -39,7 +39,7 @@ router.post(
 
 router.patch(
   "/:table/:id/update",
-  authMiddleware(50),
+  authMiddleware(10),
   utilisateurController.updateTableController,
 );
 
