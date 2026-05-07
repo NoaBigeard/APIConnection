@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const { TableBuilder } = require("../Model/generic.model");
 const { cleanFields } = require("../Utils/template");
 const { check } = require("../Middleware/auth.middleware");
-const { addUuidIfNeeded } = require("../Utils/dbHelper");
+const { addUuidIfNeeded } = require("../Utils/Helper");
 const {
   sendMailInscription,
   sendMailResetPassword,
@@ -12,9 +12,6 @@ const {
 //console.log("Dans le fichier configurations")
 // ######################################################################## INSERT ########################################################################
 async function insertConfigurationsService(data) {
-  if (data.password) {
-    data.password = await bcrypt.hash(data.password, 10);
-  }
   await addUuidIfNeeded("configurations", data);
   const insertQuery = new TableBuilder("configurations").insert(data).build();
   const result = await pool.query(insertQuery.query, insertQuery.parameters);

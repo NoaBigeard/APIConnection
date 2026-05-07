@@ -16,7 +16,7 @@ function generateTemplate(tableName) {
           const { TableBuilder } = require("../Model/generic.model");
           const { cleanFields } = require("../Utils/template");
           const { check } = require("../Middleware/auth.middleware");
-          const { addUuidIfNeeded } = require("../Utils/dbHelper");
+          const { addUuidIfNeeded } = require("../Utils/Helper");
           const {
             sendMailInscription,
             sendMailResetPassword,
@@ -24,9 +24,6 @@ function generateTemplate(tableName) {
           //console.log("Dans le fichier ${tableName}")
          // ######################################################################## INSERT ########################################################################
           async function insert${capitalize(tableName)}Service(data){
-              if (data.password) {
-                  data.password = await bcrypt.hash(data.password, 10);
-                }
               await addUuidIfNeeded("${tableName}", data);
               const insertQuery = new TableBuilder("${tableName}").insert(data).build();
               const result = await pool.query(insertQuery.query, insertQuery.parameters);

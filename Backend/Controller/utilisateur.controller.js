@@ -115,14 +115,19 @@ function capitalize(string) {
 async function insertTableController(req, res) {
   try {
     const table = req.params.table.trim();
+    console.log("body:", req.body);
+    console.log("files:", req.files);
     if (table === "users") {
       req.body.ip_address = req.ip;
       req.body.user_agent = req.get("user-agent");
     }
-    console.log("table:", req.params.table);
-    console.log("body:", req.body);
+
     const service = require(`../Service/${table}.service.js`);
-    const result = await service[`insert${capitalize(table)}Service`](req.body);
+    const result = await service[`insert${capitalize(table)}Service`](
+      req.body,
+      req.files || [],
+    );
+
     return res.status(201).json(result);
   } catch (err) {
     const status = err.status || 500;
@@ -207,6 +212,18 @@ async function uploadAWSController(req, res) {
   }
 }
 
+async function addPhotosController(req, res) {
+  try {
+    const id = req.params.id;
+    const { addPhotosService } = require("../Service/articles.service");
+    const result = await addPhotosService(id, req.files || []);
+    return res.status(201).json(result);
+  } catch (err) {
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    return res.status(status).json({ message });
+  }
+}
 module.exports = {
   userInscriptionController,
   inscriptionMailController,
@@ -220,4 +237,5 @@ module.exports = {
   softDeleteController,
   updateTableController,
   uploadAWSController,
+  addPhotosController,
 };

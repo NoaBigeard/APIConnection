@@ -1,13 +1,13 @@
--- chcp 65001; psql -U admin -d DBStage
+-- chcp 65001; psql -U postgres -d DBStage
 
 
 -- DROP SCHEMA public CASCADE;
 -- CREATE SCHEMA public;
--- GRANT ALL ON SCHEMA public TO admin;
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO admin;
--- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO admin;
+GRANT ALL ON SCHEMA public TO admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO admin;
 
 DROP TABLE IF EXISTS mail CASCADE;
 DROP TABLE IF EXISTS sizes CASCADE;
@@ -195,6 +195,7 @@ CREATE TABLE IF NOT EXISTS favorites (
 CREATE TABLE IF NOT EXISTS colors (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
+    hex_code VARCHAR(7) NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE
@@ -220,13 +221,14 @@ CREATE TABLE IF NOT EXISTS mail(
 
 INSERT INTO mail (type, subject, content) VALUES 
 ('inscription', 'Valide ton compte', '<p>Afin de finaliser votre compte, merci d''effectuer la validation avec le code suivant : </p><h2>{{code}}</h2>'),
-('reset_password', 'Réinitialiser votre mot de passe', '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a href="{{link}}">Réinitialiser mon mot de passe</a>');
+('reset_password', 'Réinitialiser votre mot de passe', '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a target="_self" href="{{link}}">Réinitialiser mon mot de passe</a>');
 SET client_encoding = 'UTF8';
 
 UPDATE mail SET 
   subject = 'Réinitialiser votre mot de passe',
-  content = '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a href="{{link}}">Réinitialiser mon mot de passe</a>'
+    content = '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a target="_self" href="{{link}}">Réinitialiser mon mot de passe</a>'
 WHERE type = 'reset_password';
+    
 -- DROP TABLE IF EXISTS test CASCADE;
 -- CREATE TABLE IF NOT EXISTS test (
 --     id SERIAL PRIMARY KEY,

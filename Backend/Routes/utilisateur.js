@@ -23,17 +23,17 @@ router.patch(
   utilisateurController.updatePasswordController,
 );
 
-// ######################## AWS upload ########################
-router.post(
-  "/upload",
-  authMiddleware(10),
-  upload.single("file"),
-  utilisateurController.uploadAWSController,
+router.patch(
+  "/articles/:id/update/photos",
+  authMiddleware(50),
+  upload.array("photos", 5),
+  utilisateurController.addPhotosController,
 );
 
 router.post(
   "/:table/insert",
   authMiddleware(50),
+  upload.array("photos", 5),
   utilisateurController.insertTableController,
 );
 
