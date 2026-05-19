@@ -9,18 +9,17 @@ const {
   sendMailInscription,
   sendMailResetPassword,
 } = require("../Utils/mailer");
-const { stripeClient } = require("../Utils/stripeAPI");
-//console.log("Dans le fichier orders")
+//console.log("Dans le fichier carts")
 // ######################################################################## INSERT ########################################################################
-async function insertOrdersService(data) {
-  await addUuidIfNeeded("orders", data);
-  const insertQuery = new TableBuilder("orders").insert(data).build();
+async function insertCartsService(data) {
+  await addUuidIfNeeded("carts", data);
+  const insertQuery = new TableBuilder("carts").insert(data).build();
   const result = await pool.query(insertQuery.query, insertQuery.parameters);
   return cleanFields(result.rows[0]);
 }
 
 //######################################################################## GET ALL ########################################################################
-async function getAllOrdersService({
+async function getAllCartsService({
   limit,
   offset,
   orderBy,
@@ -28,7 +27,7 @@ async function getAllOrdersService({
   fields,
   filter,
 } = {}) {
-  const builder = new TableBuilder("orders").select("*");
+  const builder = new TableBuilder("carts").select("*");
 
   if (fields) builder.select(fields.join(", "));
 
@@ -59,8 +58,8 @@ async function getAllOrdersService({
 }
 
 // ######################################################################## GET ONE  ########################################################################
-async function getOrdersByIdService(id, { fields } = {}) {
-  const builder = new TableBuilder("orders").select("*");
+async function getCartsByIdService(id, { fields } = {}) {
+  const builder = new TableBuilder("carts").select("*");
 
   if (fields) builder.select(fields.join(", "));
 
@@ -72,8 +71,8 @@ async function getOrdersByIdService(id, { fields } = {}) {
 }
 
 //######################################################################## UPDATE ########################################################################
-async function updateOrdersService(id, data) {
-  const query = new TableBuilder("orders")
+async function updateCartsService(id, data) {
+  const query = new TableBuilder("carts")
     .update(data)
     .where("id", "=", id)
     .build();
@@ -83,8 +82,8 @@ async function updateOrdersService(id, data) {
 }
 
 //######################################################################## SOFT DELETE ########################################################################
-async function deleteOrdersService(id) {
-  const builder = new TableBuilder("orders").update({ deleted: true });
+async function deleteCartsService(id) {
+  const builder = new TableBuilder("carts").update({ deleted: true });
 
   if (id) {
     builder.where("id", "=", id).where("deleted", "=", false);
@@ -100,28 +99,16 @@ async function deleteOrdersService(id) {
   }
   return {
     message: id
-      ? `L'élément avec l'id ${id} de la table orders a bien été supprimé`
-      : `Tous les éléments de la table orders ont bien été supprimés`,
+      ? `L'élément avec l'id ${id} de la table carts a bien été supprimé`
+      : `Tous les éléments de la table carts ont bien été supprimés`,
     count: result.rows.length,
   };
 }
 
-// async function createPaymentIntentService({ amount, currency = "eur" }) {
-//   const paymentIntent = await stripeClient.paymentIntents.create({
-//     amount,
-//     currency,
-//   });
-
-//   return {
-//     clientSecret: paymentIntent.client_secret,
-//   };
-// }
-
 module.exports = {
-  insertOrdersService,
-  getAllOrdersService,
-  getOrdersByIdService,
-  updateOrdersService,
-  deleteOrdersService,
-  // createPaymentIntentService,
+  insertCartsService,
+  getAllCartsService,
+  getCartsByIdService,
+  updateCartsService,
+  deleteCartsService,
 };

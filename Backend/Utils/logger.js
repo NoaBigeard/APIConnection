@@ -8,7 +8,16 @@ const logsDir = path.join(__dirname, "../Logs");
 if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
 
 function writeLog(filePath, message) {
-  const date = new Date().toISOString();
+  const date = new Intl.DateTimeFormat("fr-FR", {
+    timeZone: "Europe/Paris",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(new Date());
   fs.appendFile(filePath, `[${date}] ${message}\n`, (err) => {
     if (err) console.error("Erreur écriture log:", err);
   });

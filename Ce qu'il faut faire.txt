@@ -353,3 +353,10 @@ Si le AccessLevel est <= 10 il n'est possible que de modifier son propre compte
 si = 100 on peux modif tous le monde 
 
 Faire tous ce qui est en rapport avec les articles ( achat ...)
+
+
+Créer un checkOut stripe nodeJs
+il faut faire le front avant l'API   https://docs.stripe.com/checkout/embedded/quickstart
+
+Il faut que quand je commande -> customer_id doit etre mis dans la table users 
+De plus il faut que je remplisse les champs d'infos de du users avec adresse, nom, tel ...

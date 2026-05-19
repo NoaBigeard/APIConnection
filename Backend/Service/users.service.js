@@ -283,7 +283,7 @@ async function connectionService(body) {
   const password = body.password;
 
   const user = await utilisateurModel.connectionModel(mail);
-  if (!user) {
+  if (!user) {  
     throw { status: 400, message: "Le mail ou le mot de passe est incorrect" };
   }
 
@@ -392,6 +392,25 @@ async function getMeService({ authHeader }) {
   return cleaned[0];
 }
 
+async function getCartCheckoutDetails(cartId) {
+  const query = `
+    SELECT 
+      ci.id,
+      ci.quantity,
+      ci.size,
+      ci.color,
+      a.title,
+      a.ttc_price
+    FROM cart_items ci
+    JOIN articles a ON ci.id_article = a.id
+    WHERE ci.id_cart = $1 
+      AND ci.deleted = false 
+      AND a.deleted = false
+  `;
+
+  const result = await pool.query(query, [cartId]);
+  return cleanFields(result.rows);
+}
 module.exports = {
   insertUsersService,
   getAllUsersService,
@@ -404,4 +423,5 @@ module.exports = {
   resetPasswordService,
   updatePasswordService,
   getMeService,
+  getCartCheckoutDetails,
 };

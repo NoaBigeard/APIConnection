@@ -3,12 +3,15 @@
 
 -- DROP SCHEMA public CASCADE;
 -- CREATE SCHEMA public;
-GRANT ALL ON SCHEMA public TO admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO admin;
+-- GRANT ALL ON SCHEMA public TO admin;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO admin;
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO admin;
 
+
+DROP TABLE IF EXISTS cart_items CASCADE;
+DROP TABLE IF EXISTS carts CASCADE;
 DROP TABLE IF EXISTS mail CASCADE;
 DROP TABLE IF EXISTS sizes CASCADE;
 DROP TABLE IF EXISTS colors CASCADE;
@@ -29,16 +32,18 @@ CREATE TABLE IF NOT EXISTS configurations (
     nb_failed_attempt INT,
     nb_two_factor_authentification INT,
     fields_to_clean TEXT[] DEFAULT '{}',
+    TVA_rate INT,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE
 );
-INSERT INTO configurations (website_name, nb_failed_attempt, nb_two_factor_authentification, fields_to_clean)
-VALUES ('Mon Site', 5, 6, '{"password", "authentication_code"}');
+INSERT INTO configurations (website_name, nb_failed_attempt, nb_two_factor_authentification, fields_to_clean, TVA_rate)
+VALUES ('Mon Site', 5, 6, '{"password", "authentication_code"}', 20);
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
+    stripe_customer_id VARCHAR(255) UNIQUE,
     first_name VARCHAR(50),
     name VARCHAR(50),
     password VARCHAR(255) NOT NULL,
@@ -59,12 +64,17 @@ CREATE TABLE IF NOT EXISTS users (
     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE
 );
+
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255) UNIQUE;
+
 INSERT INTO users (
     uuid, first_name, name, password, mail, phone, sex,
     access_level, user_agent, ip_address, token, token_expiry,
     mail_verified, last_login, creation_date, change_date, deleted
 ) VALUES (
     '5b5a4a09-65cd-45c4-9123-a05d300cd316',
+    NULL,
     'Noa',
     'Bigeard',
     '$2b$10$JIcJJCM9JsoAVIU40bZqBeBwVf0HQRnMUQ6nS8iN0104lvAivwr/O',
@@ -152,6 +162,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
     orders_number INT,
+        stripe_session_id VARCHAR(255) UNIQUE,
     status VARCHAR(50) DEFAULT 'en attente',
     state VARCHAR(50) CHECK (state IN (
         'nouveau','en_preparation','expedie',
@@ -229,12 +240,26 @@ UPDATE mail SET
     content = '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a target="_self" href="{{link}}">Réinitialiser mon mot de passe</a>'
 WHERE type = 'reset_password';
     
--- DROP TABLE IF EXISTS test CASCADE;
--- CREATE TABLE IF NOT EXISTS test (
---     id SERIAL PRIMARY KEY,
---     name VARCHAR(50) NOT NULL,
---     description VARCHAR(255),
---     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     deleted BOOLEAN DEFAULT FALSE
--- );
+
+CREATE TABLE IF NOT EXISTS carts (
+    id SERIAL PRIMARY KEY,
+    uuid UUID UNIQUE NOT NULL,
+    id_users INT REFERENCES users(id) ON DELETE CASCADE,
+    status VARCHAR(50) DEFAULT 'active',
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    id SERIAL PRIMARY KEY,
+    uuid UUID UNIQUE NOT NULL,
+    id_cart INT REFERENCES carts(id) ON DELETE CASCADE,
+    id_article INT REFERENCES articles(id) ON DELETE CASCADE,
+    quantity INT NOT NULL DEFAULT 1,
+    size VARCHAR(50),
+    color VARCHAR(50),
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT FALSE
+);

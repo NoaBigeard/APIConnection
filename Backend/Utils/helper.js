@@ -46,6 +46,7 @@ function checkPermission(requestingUser, ownerId) {
   }
 }
 
+
 module.exports = {
   parseQuery,
   getTableColumns,

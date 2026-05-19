@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "nodemon Backend/Server.js",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$listeners = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if ($listeners) { $listeners | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue } }; nodemon Backend/Server.js\"",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1041.0",
+    "@stripe/stripe-js": "^9.4.0",
     "aws-sdk": "^2.1693.0",
     "bcrypt": "^6.0.0",
     "bucket": "^0.0.1",
@@ -21,6 +22,7 @@
     "prettier": "^3.8.3",
     "random": "^5.4.1",
     "sib-api-v3-sdk": "^8.5.0",
+    "stripe": "^22.1.1",
     "uuid": "^13.0.1",
     "vue": "^3.5.32"
   },

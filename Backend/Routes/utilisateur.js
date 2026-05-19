@@ -4,6 +4,36 @@ const utilisateurController = require("../Controller/utilisateur.controller");
 const { authMiddleware } = require("../Middleware/auth.middleware");
 const { upload } = require("../Utils/upload");
 
+router.post(
+  "/create-checkout-session",
+  authMiddleware(10),
+  utilisateurController.createCheckoutSessionController,
+);
+router.get(
+  "/carts/active",
+  authMiddleware(10),
+  utilisateurController.getActiveCartController,
+);
+router.post(
+  "/carts/insert",
+  authMiddleware(10),
+  utilisateurController.addToCartController,
+);
+router.post(
+  "/carts/delete",
+  authMiddleware(10),
+  utilisateurController.removeFromCart,
+);
+router.post(
+  "/carts/clear",
+  authMiddleware(10),
+  utilisateurController.clearCartController,
+);
+router.get(
+  "/session-status",
+  authMiddleware(10),
+  utilisateurController.sessionStatusController,
+);
 router.post("/inscription", utilisateurController.userInscriptionController);
 //Peut-être plus nécessaire maintenant vu que la route /inscription l'utilise
 router.post(
@@ -40,6 +70,7 @@ router.post(
 router.patch(
   "/:table/:id/update",
   authMiddleware(10),
+  upload.array("photos", 5),
   utilisateurController.updateTableController,
 );
 
@@ -56,15 +87,12 @@ router.patch(
 
 //Les dernières
 router.get("/getMe", authMiddleware(10), utilisateurController.getMeController);
+
+router.get("/:table", utilisateurController.getTableController);
 router.get(
-  "/:table",
-  authMiddleware(10),
+  "/:table/:uuid([0-9a-fA-F-]{36})",
   utilisateurController.getTableController,
 );
-router.get(
-  "/:table/:id",
-  authMiddleware(10),
-  utilisateurController.getTableController,
-);
+router.get("/:table/:id(\\d+)", utilisateurController.getTableController);
 
 module.exports = router;
