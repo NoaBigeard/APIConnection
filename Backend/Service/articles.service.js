@@ -71,6 +71,7 @@ async function getAllArticlesService({
   orderAttr,
   fields,
   filter,
+  includeDeleted = false,
 } = {}) {
   const builder = new TableBuilder("articles").select("*");
 
@@ -87,11 +88,13 @@ async function getAllArticlesService({
       neq: "!=",
     };
     builder.where(column, operatorList[operator] || "=", value);
-    builder.where("deleted", "=", false);
-  } else {
+  }
+  const shouldIncludeDeleted =
+    includeDeleted === true || String(includeDeleted) === "true";
+
+  if (!shouldIncludeDeleted) {
     builder.where("deleted", "=", false);
   }
-
   builder
     .limit(limit || 10)
     .offset(offset || 0)
@@ -244,6 +247,29 @@ async function addPhotosService(id_article, files) {
   }
   return { message: "Photos ajoutées avec succès", photos };
 }
+async function restoreService(id) {
+  const builder = new TableBuilder("articles").update({ deleted: false });
+
+  if (id) {
+    builder.where("id", "=", id).where("deleted", "=", true);
+  } else {
+    builder.where("deleted", "=", true);
+  }
+
+  const query = builder.build();
+  const result = await pool.query(query.query, query.parameters);
+
+  if (id && result.rowCount === 0) {
+    throw { status: 404, message: "Élément introuvable ou déjà actif" };
+  }
+
+  return {
+    message: id
+      ? `L'article avec l'id ${id} a bien été réactivé`
+      : `Tous les articles ont bien été réactivés`,
+    count: result.rowCount || result.rows.length,
+  };
+}
 module.exports = {
   insertArticlesService,
   getAllArticlesService,
@@ -252,4 +278,5 @@ module.exports = {
   updateArticlesService,
   deleteArticlesService,
   addPhotosService,
+  restoreService,
 };

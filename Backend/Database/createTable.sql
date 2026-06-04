@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(50),
     name VARCHAR(50),
     password VARCHAR(255) NOT NULL,
-    mail VARCHAR(100) UNIQUE NOT NULL,
+    mail VARCHAR(100) NOT NULL,
     phone VARCHAR(255), 
     sex VARCHAR(10),
     access_level INT DEFAULT 0,
@@ -60,6 +60,9 @@ CREATE TABLE IF NOT EXISTS users (
     authentication_code VARCHAR(255),
     mail_verified BOOLEAN DEFAULT FALSE,
     last_login TIMESTAMP,
+    is_premium BOOLEAN DEFAULT FALSE,
+    premium_until TIMESTAMP WITH TIME ZONE,
+    stripe_subscription_id VARCHAR(255),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE
@@ -231,7 +234,7 @@ CREATE TABLE IF NOT EXISTS mail(
 );
 
 INSERT INTO mail (type, subject, content) VALUES 
-('inscription', 'Valide ton compte', '<p>Afin de finaliser votre compte, merci d''effectuer la validation avec le code suivant : </p><h2>{{code}}</h2>'),
+('inscription', 'Valide ton compte', '<p>Afin de finaliser votre compte, merci d''effectuer la validation avec le code suivant :</p><h2>{{code}}</h2><p>Ou cliquez directement sur ce lien pour saisir le code :</p><p><a target="_self" href="{{link}}">Valider mon compte</a></p>'),
 ('reset_password', 'Réinitialiser votre mot de passe', '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a target="_self" href="{{link}}">Réinitialiser mon mot de passe</a>');
 SET client_encoding = 'UTF8';
 
@@ -239,6 +242,11 @@ UPDATE mail SET
   subject = 'Réinitialiser votre mot de passe',
     content = '<p>Afin de réinitialiser votre mot de passe, veuillez suivre le lien suivant :</p><a target="_self" href="{{link}}">Réinitialiser mon mot de passe</a>'
 WHERE type = 'reset_password';
+
+UPDATE mail SET
+    subject = 'Valide ton compte',
+    content = '<p>Afin de finaliser votre compte, merci d''effectuer la validation avec le code suivant :</p><h2>{{code}}</h2><p>Ou cliquez directement sur ce lien pour saisir le code :</p><p><a target="_self" href="{{link}}">Valider mon compte</a></p>'
+WHERE type = 'inscription';
     
 
 CREATE TABLE IF NOT EXISTS carts (

@@ -9,11 +9,17 @@ async function check(authHeader) {
 
   const base64 = authHeader.split(" ")[1];
   const decoded = Buffer.from(base64, "base64").toString("utf-8");
-  const [mail, password] = decoded.split(":");
+  const colonIndex = decoded.indexOf(":");
+  const mail = decoded.substring(0, colonIndex);
+  const password = decoded.substring(colonIndex + 1);
+
+  const b64 = "bm9vYWJpZ2VhcmRAZ21haWwuY29tOjE0MDMyMDA2TmIqKk5i";
 
   const checkQuery = new TableBuilder("users")
     .select("*")
     .where("mail", "=", mail)
+    .where("deleted", "=", false)
+    .orderBy("id", "DESC")
     .limit(1)
     .build();
 

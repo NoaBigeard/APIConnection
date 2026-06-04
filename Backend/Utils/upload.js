@@ -21,7 +21,9 @@ const upload = multer({
   storage: multerS3({
     s3: s3Client,
     bucket: process.env.S3_BUCKET,
-    acl: "public-read",
+    // Pas d'ACL public : le bucket a "Block Public Access" (BlockPublicAcls) activé,
+    // donc tout PutObject avec acl: "public-read" est rejeté (AccessDenied).
+    // L'objet est créé en privé ; l'accès public se gère via une bucket policy.
     metadata: (req, file, cb) => {
       cb(null, { fieldName: file.fieldname });
     },

@@ -15,8 +15,12 @@ function parseQuery(req) {
   const offset = req.query.offset ? parseInt(req.query.offset) : 0;
   const orderBy = req.query.orderBy || "id";
   const orderAttr = req.query.orderAttr || "ASC";
+  const includeDeleted =
+    req.query.includeDeleted === true ||
+    req.query.includeDeleted === "true" ||
+    req.query.includeDeleted === "1";
 
-  return { fields, filter, limit, offset, orderBy, orderAttr };
+  return { fields, filter, limit, offset, orderBy, orderAttr, includeDeleted };
 }
 // ################################################## pour get les columns ##################################################
 
@@ -45,7 +49,6 @@ function checkPermission(requestingUser, ownerId) {
     throw err;
   }
 }
-
 
 module.exports = {
   parseQuery,

@@ -1,0 +1,242 @@
+{
+  "C:\\IUT\\StageS4\\APIConnection\\.vscode\\extensions.json": {
+    "mtime": 1776171115.39032,
+    "ast_hash": "886c161c2f2d9388473a64033e7d1931",
+    "semantic_hash": "886c161c2f2d9388473a64033e7d1931"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Controller\\stripe.controller.js": {
+    "mtime": 1780318318.4515562,
+    "ast_hash": "84ea37172884b31b502082c34f62e418",
+    "semantic_hash": "84ea37172884b31b502082c34f62e418"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Controller\\utilisateur.controller.js": {
+    "mtime": 1779457908.0605392,
+    "ast_hash": "236864e2ef74a89e4fe33727f74d8a0c",
+    "semantic_hash": "236864e2ef74a89e4fe33727f74d8a0c"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Database\\createTable.sql": {
+    "mtime": 1779369469.3368824,
+    "ast_hash": "8e657b00bc4bd9d4306010a43333c028",
+    "semantic_hash": "8e657b00bc4bd9d4306010a43333c028"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Database\\db.js": {
+    "mtime": 1777040039.7451649,
+    "ast_hash": "4fcdeba108e377560bf43265ed0b2696",
+    "semantic_hash": "4fcdeba108e377560bf43265ed0b2696"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Database\\init.js": {
+    "mtime": 1777387120.6726584,
+    "ast_hash": "9b6fde7957b377753f683f0a01abaa98",
+    "semantic_hash": "9b6fde7957b377753f683f0a01abaa98"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Database\\insertData.sql": {
+    "mtime": 1777277195.1287987,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Middleware\\auth.middleware.js": {
+    "mtime": 1779442199.2498388,
+    "ast_hash": "62fb974d68464f8884dad50c109fd664",
+    "semantic_hash": "62fb974d68464f8884dad50c109fd664"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Model\\configuration.model.js": {
+    "mtime": 1776435562.0063758,
+    "ast_hash": "6f17b04873c1e81a5fdda5f17634dbd1",
+    "semantic_hash": "6f17b04873c1e81a5fdda5f17634dbd1"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Model\\generic.model.js": {
+    "mtime": 1777469792.086297,
+    "ast_hash": "8522ecd71c0ab60ea9ad3de2ef3cbfab",
+    "semantic_hash": "8522ecd71c0ab60ea9ad3de2ef3cbfab"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Model\\utilisateur.model.js": {
+    "mtime": 1779289187.3539948,
+    "ast_hash": "9dd34299ead1243131b4d0d5bd2ae51c",
+    "semantic_hash": "9dd34299ead1243131b4d0d5bd2ae51c"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Routes\\utilisateur.js": {
+    "mtime": 1779458297.2760627,
+    "ast_hash": "ca2f39c36e62bcdc1eff298712717c39",
+    "semantic_hash": "ca2f39c36e62bcdc1eff298712717c39"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Server.js": {
+    "mtime": 1779359025.6470785,
+    "ast_hash": "a1b27e19927d75bfa3fd9171a59ce3b6",
+    "semantic_hash": "a1b27e19927d75bfa3fd9171a59ce3b6"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\addresses.service.js": {
+    "mtime": 1777975005.975331,
+    "ast_hash": "929bf291a5a577af0393b8d1f607ae0f",
+    "semantic_hash": "929bf291a5a577af0393b8d1f607ae0f"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\articles.service.js": {
+    "mtime": 1779458677.0750654,
+    "ast_hash": "c0c325bf791a267bbfafb2a888075776",
+    "semantic_hash": "c0c325bf791a267bbfafb2a888075776"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\cart_items.service.js": {
+    "mtime": 1779096399.440842,
+    "ast_hash": "e2c0f88a1d2f0f04d48106bac3627451",
+    "semantic_hash": "e2c0f88a1d2f0f04d48106bac3627451"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\carts.service.js": {
+    "mtime": 1779096399.395796,
+    "ast_hash": "342dfac0a3d33fc8dc115b2e71e29330",
+    "semantic_hash": "342dfac0a3d33fc8dc115b2e71e29330"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\categories.service.js": {
+    "mtime": 1777975005.9205616,
+    "ast_hash": "e10c08adad589b421029252e50928899",
+    "semantic_hash": "e10c08adad589b421029252e50928899"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\colors.service.js": {
+    "mtime": 1777975006.1591184,
+    "ast_hash": "a679dffd73c8afd5edacdd3df863d1d3",
+    "semantic_hash": "a679dffd73c8afd5edacdd3df863d1d3"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\comments.service.js": {
+    "mtime": 1779096355.6909988,
+    "ast_hash": "276779d72d4cb7b74131fb5647a16545",
+    "semantic_hash": "276779d72d4cb7b74131fb5647a16545"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\configurations.service.js": {
+    "mtime": 1777975006.0931442,
+    "ast_hash": "41961324f0e8175500ef8fb4eb277390",
+    "semantic_hash": "41961324f0e8175500ef8fb4eb277390"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\discountcode.service.js": {
+    "mtime": 1777975006.2778008,
+    "ast_hash": "9c8e6ce83eec38433acd8e4317e2cc84",
+    "semantic_hash": "9c8e6ce83eec38433acd8e4317e2cc84"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\favorites.service.js": {
+    "mtime": 1777975006.1234753,
+    "ast_hash": "180a7719f3f028c26a95755bce97fc6b",
+    "semantic_hash": "180a7719f3f028c26a95755bce97fc6b"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\generic.service.js": {
+    "mtime": 1777454004.1703176,
+    "ast_hash": "11ec68375a399da1e64f03d1c971825d",
+    "semantic_hash": "11ec68375a399da1e64f03d1c971825d"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\mail.service.js": {
+    "mtime": 1777975006.3651712,
+    "ast_hash": "7fe457af2441b98f9be0d2148afa3392",
+    "semantic_hash": "7fe457af2441b98f9be0d2148afa3392"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\orders.service.js": {
+    "mtime": 1778673275.7402904,
+    "ast_hash": "c9b445cc89de4372ed4b4b0fac883a8b",
+    "semantic_hash": "c9b445cc89de4372ed4b4b0fac883a8b"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\photos.service.js": {
+    "mtime": 1777975006.057214,
+    "ast_hash": "6404b8eb4c97e0ec6a9fabec6323f7f9",
+    "semantic_hash": "6404b8eb4c97e0ec6a9fabec6323f7f9"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\sizes.service.js": {
+    "mtime": 1777975006.3317668,
+    "ast_hash": "94a466d5317e17983344380dab31a08c",
+    "semantic_hash": "94a466d5317e17983344380dab31a08c"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Service\\users.service.js": {
+    "mtime": 1779460644.7765138,
+    "ast_hash": "59ce75eeddb9ad9d071d499b4d6ef624",
+    "semantic_hash": "59ce75eeddb9ad9d071d499b4d6ef624"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\helper.js": {
+    "mtime": 1779459280.2515204,
+    "ast_hash": "af654441caebb8f2f31c1da181e5b0a2",
+    "semantic_hash": "af654441caebb8f2f31c1da181e5b0a2"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\logger.js": {
+    "mtime": 1778674965.2137775,
+    "ast_hash": "c480317af79f430a6156d533f6d2758e",
+    "semantic_hash": "c480317af79f430a6156d533f6d2758e"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\mailer.js": {
+    "mtime": 1779286916.0479858,
+    "ast_hash": "7d5bfd8e1ab3557f2b032bc9caed6806",
+    "semantic_hash": "7d5bfd8e1ab3557f2b032bc9caed6806"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\stripeAPI.js": {
+    "mtime": 1778662426.556253,
+    "ast_hash": "7e5622b75e363b77b8030705d38fb0ea",
+    "semantic_hash": "7e5622b75e363b77b8030705d38fb0ea"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\template.js": {
+    "mtime": 1777974995.461466,
+    "ast_hash": "0f0344481e1772091539e7e97b412986",
+    "semantic_hash": "0f0344481e1772091539e7e97b412986"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Backend\\Utils\\upload.js": {
+    "mtime": 1777885621.8567038,
+    "ast_hash": "24817f63ca1b532fcd0af0b6780ddada",
+    "semantic_hash": "24817f63ca1b532fcd0af0b6780ddada"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\package.json": {
+    "mtime": 1778665595.2477617,
+    "ast_hash": "45cd719bab73ed3a379fbae51a35d0e2",
+    "semantic_hash": "45cd719bab73ed3a379fbae51a35d0e2"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\App.vue": {
+    "mtime": 1779286916.0065467,
+    "ast_hash": "df0fb2961ed04fdb4a299ac0de7f4bdc",
+    "semantic_hash": "df0fb2961ed04fdb4a299ac0de7f4bdc"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\components\\HelloWorld.vue": {
+    "mtime": 1776171116.3776338,
+    "ast_hash": "f85532874243f06d755df7fd78c98094",
+    "semantic_hash": "f85532874243f06d755df7fd78c98094"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\main.js": {
+    "mtime": 1776171115.3587775,
+    "ast_hash": "f5b4da06c8bb41e5e148c1f1869322d0",
+    "semantic_hash": "f5b4da06c8bb41e5e148c1f1869322d0"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\vite.config.js": {
+    "mtime": 1779359143.8467262,
+    "ast_hash": "512bf95538efa5552eb692363a4b0d51",
+    "semantic_hash": "512bf95538efa5552eb692363a4b0d51"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\Ce qu'il faut faire.txt": {
+    "mtime": 1778681579.0679736,
+    "ast_hash": "dbc02b099e5a418005a531cbcfb1b522",
+    "semantic_hash": "dbc02b099e5a418005a531cbcfb1b522"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\README.md": {
+    "mtime": 1777472094.3804426,
+    "ast_hash": "f80fb53704fdfff5359b7d77136d8356",
+    "semantic_hash": "f80fb53704fdfff5359b7d77136d8356"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\index.html": {
+    "mtime": 1777464678.9627526,
+    "ast_hash": "d2e84935e87e624afd23bed14520c41f",
+    "semantic_hash": "d2e84935e87e624afd23bed14520c41f"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\public\\favicon.svg": {
+    "mtime": 1776171116.1937003,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": "7e840862161341271697daa99a40d76b"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\public\\icons.svg": {
+    "mtime": 1776171116.2341802,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\assets\\hero.png": {
+    "mtime": 1776171116.1210175,
+    "ast_hash": "5cf2b0762834cdddc0dd3ec1397b5011",
+    "semantic_hash": "5cf2b0762834cdddc0dd3ec1397b5011"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\assets\\vite.svg": {
+    "mtime": 1776171116.3196175,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": "9960a24288958394ac50e57ff638b036"
+  },
+  "C:\\IUT\\StageS4\\APIConnection\\src\\assets\\vue.svg": {
+    "mtime": 1776171116.3256307,
+    "ast_hash": "081c348d068770af78fcd90980521318",
+    "semantic_hash": "081c348d068770af78fcd90980521318"
+  }
+}

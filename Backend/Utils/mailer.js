@@ -24,6 +24,11 @@ async function getMailTemplate(type, variables = {}) {
 
   let { subject, content } = template;
 
+  if (type === "inscription" && !content.includes("{{link}}")) {
+    content +=
+      '<p>Ou cliquez directement sur ce lien pour saisir le code :</p><p><a target="_self" href="{{link}}">Valider mon compte</a></p>';
+  }
+
   Object.entries(variables).forEach(([key, value]) => {
     subject = subject.replaceAll(`{{${key}}}`, value);
     content = content.replaceAll(`{{${key}}}`, value);

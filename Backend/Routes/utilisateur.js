@@ -1,14 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const utilisateurController = require("../Controller/utilisateur.controller");
+const stripeController = require("../Controller/stripe.controller");
 const { authMiddleware } = require("../Middleware/auth.middleware");
 const { upload } = require("../Utils/upload");
 
+//Stripe ##################################################################################################
+router.get(
+  "/session-status",
+  authMiddleware(10),
+  stripeController.sessionStatusController,
+);
+router.get(
+  "/subscription-plans",
+  authMiddleware(10),
+  stripeController.getSubscriptionPlansController,
+);
+router.post(
+  "/customer-portal",
+  authMiddleware(10),
+  stripeController.customerPortalController,
+);
 router.post(
   "/create-checkout-session",
   authMiddleware(10),
-  utilisateurController.createCheckoutSessionController,
+  stripeController.createCheckoutSessionController,
 );
+router.post(
+  "/create-subscription-checkout",
+  authMiddleware(10),
+  stripeController.createSubscriptionCheckout,
+);
+
+//Cart ##################################################################################################
 router.get(
   "/carts/active",
   authMiddleware(10),
@@ -29,11 +53,9 @@ router.post(
   authMiddleware(10),
   utilisateurController.clearCartController,
 );
-router.get(
-  "/session-status",
-  authMiddleware(10),
-  utilisateurController.sessionStatusController,
-);
+
+//Inscription/connection ##################################################################################################
+
 router.post("/inscription", utilisateurController.userInscriptionController);
 //Peut-être plus nécessaire maintenant vu que la route /inscription l'utilise
 router.post(
@@ -53,11 +75,18 @@ router.patch(
   utilisateurController.updatePasswordController,
 );
 
+//Table ##################################################################################################
 router.patch(
   "/articles/:id/update/photos",
   authMiddleware(50),
   upload.array("photos", 5),
   utilisateurController.addPhotosController,
+);
+
+router.patch(
+  "/articles/:id/restore",
+  authMiddleware(10),
+  utilisateurController.restoreController,
 );
 
 router.post(
@@ -79,6 +108,7 @@ router.patch(
   authMiddleware(50),
   utilisateurController.softDeleteController,
 );
+
 router.patch(
   "/:table/:id/delete",
   authMiddleware(50),

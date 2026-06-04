@@ -147,7 +147,9 @@ function evaluatePassword(password) {
 }
 
 async function userInscriptionService(user) {
-  const mail = user.mail;
+  const mail = String(user.mail || "")
+    .trim()
+    .toLowerCase();
   const password = user.password;
   const { checks } = evaluatePassword(password);
   if (!checks.length) {
@@ -195,6 +197,7 @@ async function userInscriptionService(user) {
 
   const checkQuery = new TableBuilder("users")
     .where("mail", "=", mail)
+    .where("deleted", "=", false)
     .limit(1)
     .build();
 
@@ -222,7 +225,7 @@ async function userInscriptionService(user) {
     ip_address: user.ip_address || null,
     phone: user.phone || null,
     sex: user.sex || null,
-    access_level: 0,
+    access_level: needCode ? 0 : 10,
     mail_verified: !needCode,
   });
 
@@ -236,7 +239,10 @@ async function userInscriptionService(user) {
     await sendMail({
       mail: createdUser.mail,
       type: "inscription",
-      variables: { code: createdUser.authentication_code },
+      variables: {
+        code: createdUser.authentication_code,
+        link: `${process.env.LINK_FRONT || process.env.FRONT_DOMAIN || "http://localhost:5173"}/verify-email?mail=${encodeURIComponent(createdUser.mail)}&code=${encodeURIComponent(createdUser.authentication_code)}`,
+      },
     });
   }
 
@@ -250,11 +256,24 @@ async function userInscriptionService(user) {
 // ######################################################################## User inscription mail ########################################################################
 async function verificationAuthenticateCodeService(body) {
   const code = body.code;
+  const mail = String(body.mail || "")
+    .trim()
+    .toLowerCase();
 
-  const verifyQuery = new TableBuilder("users")
+  if (!code) {
+    throw { status: 400, message: "Le code est requis" };
+  }
+
+  const verifyQueryBuilder = new TableBuilder("users")
     .where("authentication_code", "=", code)
     .where("mail_verified", "=", false)
-    .build();
+    .where("deleted", "=", false);
+
+  if (mail) {
+    verifyQueryBuilder.where("mail", "=", mail);
+  }
+
+  const verifyQuery = verifyQueryBuilder.build();
 
   const {
     rows: [existingUser],
@@ -265,7 +284,11 @@ async function verificationAuthenticateCodeService(body) {
   }
 
   const updateQuery = new TableBuilder("users")
-    .update({ mail_verified: true, access_level: 10 })
+    .update({
+      mail_verified: true,
+      access_level: 10,
+      authentication_code: null,
+    })
     .where("id", "=", existingUser.id)
     .build();
 
@@ -279,11 +302,13 @@ async function verificationAuthenticateCodeService(body) {
 // ######################################################################## User connection ########################################################################
 
 async function connectionService(body) {
-  const mail = body.mail;
+  const mail = String(body.mail || "")
+    .trim()
+    .toLowerCase();
   const password = body.password;
 
   const user = await utilisateurModel.connectionModel(mail);
-  if (!user) {  
+  if (!user) {
     throw { status: 400, message: "Le mail ou le mot de passe est incorrect" };
   }
 
@@ -311,6 +336,7 @@ async function resetPasswordService(body) {
 
   const checkQuery = new TableBuilder("users")
     .where("mail", "=", mail)
+    .where("deleted", "=", false)
     .limit(1)
     .build();
 
@@ -326,6 +352,7 @@ async function resetPasswordService(body) {
   const saveTokenQuery = new TableBuilder("users")
     .update({ token, token_expiry: new Date(Date.now() + 15 * 60 * 1000) })
     .where("mail", "=", mail)
+    .where("deleted", "=", false)
     .build();
 
   await pool.query(saveTokenQuery.query, saveTokenQuery.parameters);
